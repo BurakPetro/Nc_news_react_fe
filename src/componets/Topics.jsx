@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import DisplayArticle from './DisplayArticle';
+import '../styles/Topics.css';
 const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
   const [topics, setTopics] = useState(false);
   const [loadingCheckTopics, setLoadingCheckTopics] = useState(false);
@@ -50,7 +51,7 @@ const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
   }
   return (
     <>
-      <div>
+      <div className="topic-block">
         Chose your topic<br></br>
         <button
           onClick={() => {

@@ -6,7 +6,9 @@ function App() {
   return (
     <>
       <header>Nc News</header>
-      <DisplaySection />
+      <div className="display-section">
+        <DisplaySection />
+      </div>
     </>
   );
 }
