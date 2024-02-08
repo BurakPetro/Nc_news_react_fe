@@ -3,11 +3,57 @@ import moment from 'moment';
 import Comment from './Comment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { ErrContext } from '../contexts/ErrContext';
+import { useNavigate } from 'react-router-dom';
 
 const DisplayArticle = ({ article }) => {
+  const navigate = useNavigate();
+  const { setErr } = useContext(ErrContext);
   const [comments, setComments] = useState(false);
   const [comentsLoadingCheck, setComentsLoadingCheck] = useState(false);
+  const [currentUserVote, setcurrentUserVote] = useState(article.votes);
+  const [isVoted, setIsVoted] = useState(false);
+
+  const handleArticleVotesClick = (aritcle_id) => {
+    if (!isVoted) {
+      setcurrentUserVote(currentUserVote + 1);
+      setIsVoted(true);
+      fetch(
+        `https://news-lerning-project.onrender.com/api/articles/${aritcle_id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ inc_votes: 1 }),
+        }
+      )
+        .then((response) => response.json())
+        .catch((err) => {
+          setErr(err);
+          navigate('/err');
+        });
+    } else {
+      setcurrentUserVote(currentUserVote - 1);
+      setIsVoted(false);
+      fetch(
+        `https://news-lerning-project.onrender.com/api/articles/${aritcle_id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ inc_votes: -1 }),
+        }
+      )
+        .then((response) => response.json())
+        .catch((err) => {
+          setErr(err);
+          navigate('/err');
+        });
+    }
+  };
 
   const handleViewComments = (aritcle_id) => {
     if (!comments) {
@@ -25,7 +71,7 @@ const DisplayArticle = ({ article }) => {
         });
     } else {
       setComments(false);
-      comentsLoadingCheck(false);
+      setComentsLoadingCheck(false);
     }
   };
   return (
@@ -47,8 +93,16 @@ const DisplayArticle = ({ article }) => {
         </div>
         <div className="actions">
           <div className="votes">
-            <button>
-              <FontAwesomeIcon icon={faThumbsUp} /> {article.votes}
+            <button
+              onClick={() => {
+                handleArticleVotesClick(article.article_id);
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faThumbsUp}
+                color={isVoted ? 'red' : 'black'}
+              />
+              {currentUserVote}
             </button>
           </div>
           <div className="comments">
