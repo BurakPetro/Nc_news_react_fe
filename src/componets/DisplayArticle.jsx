@@ -14,7 +14,7 @@ const DisplayArticle = ({ article }) => {
           {moment(article.created_at).format('LLLL')}
         </span>
       </div>
-      {article.body ? <div>{article.body}</div> : null}
+      <div>{article.body}</div>
       <div className="image-block">
         <img
           src={article.article_img_url}
