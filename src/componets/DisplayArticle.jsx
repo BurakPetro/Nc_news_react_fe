@@ -1,13 +1,10 @@
 import '../styles/DisplayArticle.css';
 import moment from 'moment';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
-const DisplayArticle = ({
-  article,
-  displayTopics,
-  setArticle,
-  setDisplayTopics,
-}) => {
+const DisplayArticle = ({ article }) => {
+  fetch;
   return (
     <div className="aritcle-block">
       <h2>{article.title}</h2>
@@ -17,6 +14,7 @@ const DisplayArticle = ({
           {moment(article.created_at).format('LLLL')}
         </span>
       </div>
+      {article.body ? <div>{article.body}</div> : null}
       <div className="image-block">
         <img
           src={article.article_img_url}
@@ -30,26 +28,10 @@ const DisplayArticle = ({
           </button>
         </div>
         <div className="comments">
-          {displayTopics ? (
-            <button
-              className="view-comments"
-              onClick={() => {
-                setArticle(article), setDisplayTopics(false);
-              }}
-            >
-              <FontAwesomeIcon icon={faComment} />
-              {article.comment_count}
-            </button>
-          ) : (
-            <button
-              className="close-comments"
-              onClick={() => {
-                setArticle(false), setDisplayTopics(true);
-              }}
-            >
-              Close comments
-            </button>
-          )}
+          <button className="view-comments">
+            <FontAwesomeIcon icon={faComment} />
+            {article.comment_count}
+          </button>
         </div>
       </div>
     </div>
@@ -57,4 +39,3 @@ const DisplayArticle = ({
 };
 
 export default DisplayArticle;
-//button should save activ topic

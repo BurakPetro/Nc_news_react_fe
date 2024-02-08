@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import DisplaySection from './componets/DisplaySection';
-import './App.css';
 
+import { Routes, Route } from 'react-router-dom';
+import './App.css';
+import Topics from './componets/Topics';
+import Article from './componets/Article';
 function App() {
   return (
     <>
       <header>Nc News</header>
-      <div className="display-section">
-        <DisplaySection />
-      </div>
+      <Routes>
+        <Route path="/" element={<Topics />} />
+        <Route path="/article/:id" element={<Article />} />
+      </Routes>
     </>
   );
 }
