@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DisplayArticle from './DisplayArticle';
 import '../styles/Topics.css';
+import { ErrContext } from '../contexts/ErrContext';
+
 const Topics = () => {
+  const { setErr } = useContext(ErrContext);
   const navigate = useNavigate();
   const [topics, setTopics] = useState(false);
   const [loadingCheckTopics, setLoadingCheckTopics] = useState(false);
@@ -16,10 +19,19 @@ const Topics = () => {
           return response.json();
         })
         .then((body) => {
-          setTopics(body);
+          if (body.msg) {
+            setErr(body.msg);
+            navigate('/err');
+          } else {
+            setTopics(body);
+          }
         })
         .then(() => {
           setLoadingCheckTopics(true);
+        })
+        .catch((err) => {
+          setErr(err);
+          navigate('/err');
         });
     }
   }
@@ -41,10 +53,19 @@ const Topics = () => {
           return response.json();
         })
         .then((body) => {
-          setArticles(body);
+          if (body.msg) {
+            setErr(body.msg);
+            navigate('/err');
+          } else {
+            setArticles(body);
+          }
         })
         .then(() => {
           setArticlesLoadingCheck(true);
+        })
+        .catch((err) => {
+          setErr(err);
+          navigate('/err');
         });
     }
   }

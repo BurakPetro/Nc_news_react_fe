@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import DisplayArticle from './DisplayArticle';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { ErrContext } from '../contexts/ErrContext';
 
 const Article = () => {
+  const { setErr } = useContext(ErrContext);
   const [article, setArticle] = useState(false);
   const [loadingCheckArticle, setLoadingCheckArticle] = useState(false);
   const { id } = useParams();
@@ -15,10 +17,20 @@ const Article = () => {
         return response.json();
       })
       .then((body) => {
-        setArticle(body);
+        // probably need to remake server err handler
+        if (body.msg) {
+          setErr(body.msg);
+          navigate('/err');
+        } else {
+          setArticle(body);
+        }
       })
       .then(() => {
         setLoadingCheckArticle(true);
+      })
+      .catch((err) => {
+        setErr(err);
+        navigate('/err');
       });
   }, []);
   return (
@@ -35,7 +47,7 @@ const Article = () => {
             navigate(`/`);
           }}
         >
-          Chose differnt topic
+          Choose different topic
         </button>
       </div>
     </>
