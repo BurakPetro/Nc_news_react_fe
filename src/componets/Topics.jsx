@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 import DisplayArticle from './DisplayArticle';
 import '../styles/Topics.css';
-const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
+const Topics = () => {
+  const navigate = useNavigate();
   const [topics, setTopics] = useState(false);
   const [loadingCheckTopics, setLoadingCheckTopics] = useState(false);
 
@@ -15,9 +16,7 @@ const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
           return response.json();
         })
         .then((body) => {
-          if (body !== topics) {
-            setTopics(body);
-          }
+          setTopics(body);
         })
         .then(() => {
           setLoadingCheckTopics(true);
@@ -29,7 +28,7 @@ const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
     getTopics();
   }, [articles]);
 
-  function hendleActiveTopic(topic) {
+  function handleActiveTopic(topic) {
     let topicQuery = 'articles';
     if (topic) {
       topicQuery = 'articles?topic=' + topic;
@@ -55,7 +54,7 @@ const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
         Chose your topic<br></br>
         <button
           onClick={() => {
-            hendleActiveTopic();
+            handleActiveTopic();
           }}
         >
           View all articles
@@ -64,9 +63,9 @@ const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
           topics.map((topic, index) => {
             return (
               <button
-                key={`${index}`}
+                key={index}
                 onClick={() => {
-                  hendleActiveTopic(topic.slug);
+                  handleActiveTopic(topic.slug);
                 }}
               >
                 {topic.slug}
@@ -74,25 +73,31 @@ const Topics = ({ setArticle, setDisplayTopics, displayTopics }) => {
             );
           })
         ) : (
-          <div>Loading</div>
+          <div>Loading topics</div>
         )}
       </div>
       <div>
-        {articlesLoadingCheck ? (
-          articles.map((oneArticle, index) => {
-            return (
-              <DisplayArticle
-                article={oneArticle}
-                displayTopics={displayTopics}
-                setDisplayTopics={setDisplayTopics}
-                setArticle={setArticle}
-                key={index}
-              />
-            );
-          })
-        ) : (
-          <div>Loading</div>
-        )}
+        {articles ? (
+          articlesLoadingCheck ? (
+            articles.map((oneArticle, index) => {
+              return (
+                <div key={index}>
+                  <DisplayArticle article={oneArticle} />
+                  <button
+                    key={String(index)}
+                    onClick={() => {
+                      navigate(`/article/${oneArticle.article_id}`);
+                    }}
+                  >
+                    View article
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <div>Loading articles</div>
+          )
+        ) : null}
       </div>
     </>
   );
