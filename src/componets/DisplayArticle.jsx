@@ -6,14 +6,19 @@ import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useState, useContext } from 'react';
 import { ErrContext } from '../contexts/ErrContext';
 import { useNavigate } from 'react-router-dom';
+import AddComment from './AddComment';
+import { ActiveUserContext } from '../contexts/ActiveUser';
 
 const DisplayArticle = ({ article }) => {
   const navigate = useNavigate();
   const { setErr } = useContext(ErrContext);
+  const { activeUser } = useContext(ActiveUserContext);
   const [comments, setComments] = useState(false);
   const [comentsLoadingCheck, setComentsLoadingCheck] = useState(false);
   const [currentUserVote, setcurrentUserVote] = useState(article.votes);
   const [isVoted, setIsVoted] = useState(false);
+  const [addComment, setAddComment] = useState(false);
+  const [alowAddComment, setAlowAddComment] = useState(true);
 
   const handleArticleVotesClick = (aritcle_id) => {
     if (!isVoted) {
@@ -116,6 +121,20 @@ const DisplayArticle = ({ article }) => {
               {article.comment_count}
             </button>
           </div>
+          <div>
+            <button
+              disabled={!activeUser ? alowAddComment : false}
+              onClick={() => {
+                setAddComment(true);
+              }}
+            >
+              {activeUser
+                ? alowAddComment
+                  ? 'Add your comment'
+                  : 'processing your comment'
+                : 'login to post comments'}
+            </button>
+          </div>
         </div>
       </div>
       {comments ? (
@@ -130,6 +149,15 @@ const DisplayArticle = ({ article }) => {
         ) : (
           <div>Loading comments</div>
         )
+      ) : null}
+      {addComment ? (
+        activeUser ? (
+          <AddComment
+            setAlowAddComment={setAlowAddComment}
+            setAddComment={setAddComment}
+            article_id={article.article_id}
+          />
+        ) : null
       ) : null}
     </>
   );
