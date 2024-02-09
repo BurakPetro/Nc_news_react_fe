@@ -1,0 +1,13 @@
+.user-display-block {
+  display: flex;
+  font-size: 18px;
+}
+.user-display-block .avatar {
+  width: 110px;
+
+  display: flex;
+}
+
+.user-display-block .avatar img {
+  object-fit: contain;
+}

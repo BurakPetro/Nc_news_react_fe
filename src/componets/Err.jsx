@@ -4,7 +4,7 @@ const Err = () => {
   const { err } = useContext(ErrContext);
   return (
     <div className="err-block">
-      Erorr{console.log(err)}
+      Erorr
       {String(err)}
     </div>
   );
