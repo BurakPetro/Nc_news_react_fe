@@ -60,8 +60,8 @@ const DisplayArticle = ({ article }) => {
     }
   };
 
-  const handleViewComments = (aritcle_id) => {
-    if (!comments) {
+  const handleViewComments = (aritcle_id, deleteCheck) => {
+    if (!comments && !deleteCheck) {
       return fetch(
         `https://news-lerning-project.onrender.com/api/articles/${aritcle_id}/comments`
       )
@@ -74,9 +74,24 @@ const DisplayArticle = ({ article }) => {
         .then(() => {
           setComentsLoadingCheck(true);
         });
+    } else if (comments && !deleteCheck) {
+      setComments(false);
+      setComentsLoadingCheck(false);
     } else {
       setComments(false);
       setComentsLoadingCheck(false);
+      return fetch(
+        `https://news-lerning-project.onrender.com/api/articles/${aritcle_id}/comments`
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((body) => {
+          setComments(body);
+        })
+        .then(() => {
+          setComentsLoadingCheck(true);
+        });
     }
   };
   return (
@@ -142,7 +157,10 @@ const DisplayArticle = ({ article }) => {
           comments.map((comment, index) => {
             return (
               <div key={index}>
-                <Comment comment={comment} />
+                <Comment
+                  comment={comment}
+                  handleViewComments={handleViewComments}
+                />
               </div>
             );
           })
