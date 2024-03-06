@@ -1,10 +1,10 @@
-import { useState, useContext } from 'react';
-import { ActiveUserContext } from '../contexts/ActiveUser';
-import { ErrContext } from '../contexts/ErrContext';
-import { useNavigate } from 'react-router-dom';
+import { useState, useContext } from "react";
+import { ActiveUserContext } from "../contexts/ActiveUser";
+import { ErrContext } from "../contexts/ErrContext";
+import { useNavigate } from "react-router-dom";
 
 const AddComment = ({ article_id, setAddComment, setAlowAddComment }) => {
-  const [commentInput, setCommentInput] = useState('type your comment');
+  const [commentInput, setCommentInput] = useState("");
   const { activeUser } = useContext(ActiveUserContext);
   const { setErr } = useContext(ErrContext);
   const navigate = useNavigate();
@@ -12,9 +12,9 @@ const AddComment = ({ article_id, setAddComment, setAlowAddComment }) => {
     fetch(
       `https://news-lerning-project.onrender.com/api/articles/${article_id}/comments`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           username: activeUser.username,
@@ -25,21 +25,21 @@ const AddComment = ({ article_id, setAddComment, setAlowAddComment }) => {
       .then((response) => response.json())
       .then((body) => {
         setAlowAddComment(true);
-        if (body.msg !== 'comment was added') {
+        if (body.msg !== "comment was added") {
           setErr(body.msg);
-          navigate('/err');
+          navigate("/err");
         }
       })
 
       .catch((err) => {
         setErr(err);
-        navigate('/err');
+        navigate("/err");
       });
   }
 
   function handleCommentSubmit(event) {
     event.preventDefault();
-    if (commentInput === '') {
+    if (commentInput === "") {
       return null;
     } else {
       postComment(article_id);
@@ -54,11 +54,14 @@ const AddComment = ({ article_id, setAddComment, setAlowAddComment }) => {
         type="text"
         id="user-comment"
         value={commentInput}
+        placeholder="type your comment"
         onChange={(event) => {
           setCommentInput(event.target.value);
         }}
       />
-      <button type="submit">Submit</button>
+      <button className="global-button" type="submit">
+        Post comment
+      </button>
     </form>
   );
 };

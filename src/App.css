@@ -1,12 +1,13 @@
 header {
   display: flex;
-  position: fixed;
-  height: 101px;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
+  flex-grow: 1;
+
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 95vw;
   background-color: #fff9cf;
   font-size: 50px;
   padding-left: 100px;
+  height: 101px;
 }

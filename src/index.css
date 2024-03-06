@@ -5,3 +5,13 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+.global-button {
+  height: 30px;
+  width: fit-content;
+  padding: 0 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 2px;
+  border: black;
+  background-color: #00c9ff;
+}

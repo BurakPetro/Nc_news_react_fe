@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DisplayArticle from './DisplayArticle';
-import '../styles/Topics.css';
-import { ErrContext } from '../contexts/ErrContext';
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import DisplayArticle from "./DisplayArticle";
+import "../styles/Topics.css";
+import { ErrContext } from "../contexts/ErrContext";
 
 const Topics = () => {
   const { setErr } = useContext(ErrContext);
@@ -21,7 +21,7 @@ const Topics = () => {
         .then((body) => {
           if (body.msg) {
             setErr(body.msg);
-            navigate('/err');
+            navigate("/err");
           } else {
             setTopics(body);
           }
@@ -31,7 +31,7 @@ const Topics = () => {
         })
         .catch((err) => {
           setErr(err);
-          navigate('/err');
+          navigate("/err");
         });
     }
   }
@@ -41,9 +41,9 @@ const Topics = () => {
   }, [articles]);
 
   function handleActiveTopic(topic) {
-    let topicQuery = 'articles';
+    let topicQuery = "articles";
     if (topic) {
-      topicQuery = 'articles?topic=' + topic;
+      topicQuery = "articles?topic=" + topic;
     }
     {
       return fetch(
@@ -55,7 +55,7 @@ const Topics = () => {
         .then((body) => {
           if (body.msg) {
             setErr(body.msg);
-            navigate('/err');
+            navigate("/err");
           } else {
             setArticles(body);
           }
@@ -65,7 +65,7 @@ const Topics = () => {
         })
         .catch((err) => {
           setErr(err);
-          navigate('/err');
+          navigate("/err");
         });
     }
   }
@@ -74,6 +74,7 @@ const Topics = () => {
       <div className="topic-block">
         Chose your topic<br></br>
         <button
+          className="global-button"
           onClick={() => {
             handleActiveTopic();
           }}
@@ -84,6 +85,7 @@ const Topics = () => {
           topics.map((topic, index) => {
             return (
               <button
+                className="global-button"
                 key={index}
                 onClick={() => {
                   handleActiveTopic(topic.slug);
@@ -105,6 +107,7 @@ const Topics = () => {
                 <div key={index}>
                   <DisplayArticle article={oneArticle} />
                   <button
+                    className="global-button"
                     key={String(index)}
                     onClick={() => {
                       navigate(`/article/${oneArticle.article_id}`);

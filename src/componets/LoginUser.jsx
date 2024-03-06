@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
-import '../styles/UserLogin.css';
-import { ActiveUserContext } from '../contexts/ActiveUser';
-import { ErrContext } from '../contexts/ErrContext';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useState } from "react";
+import "../styles/UserLogin.css";
+import { ActiveUserContext } from "../contexts/ActiveUser";
+import { ErrContext } from "../contexts/ErrContext";
+import { useNavigate } from "react-router-dom";
 const LoginUser = () => {
   const navigate = useNavigate();
   const { activeUser, setActiveUser } = useContext(ActiveUserContext);
-  const [userInput, setUserInput] = useState('');
+  const [userInput, setUserInput] = useState("");
   const { setErr } = useContext(ErrContext);
   const [userInputLoadingCheck, setUserInputLoadingCheck] = useState(false);
 
@@ -18,22 +18,26 @@ const LoginUser = () => {
       .then((body) => {
         if (body.msg) {
           setErr(body.msg);
-          navigate('/err');
+          navigate("/err");
         } else {
           for (let index = 0; index < body.users.length; index++) {
             if (body.users[index].username === userInput) {
               return setActiveUser(body.users[index]);
             }
           }
-          return setUserInput('user not found!');
+          return "user not found";
         }
       })
-      .then(() => {
-        setUserInputLoadingCheck(true);
+      .then((result) => {
+        if (result === "user not found") {
+          alert(`${result}`);
+        } else {
+          setUserInputLoadingCheck(true);
+        }
       })
       .catch((err) => {
         setErr(err);
-        navigate('/err');
+        navigate("/err");
       });
   };
 
@@ -68,9 +72,10 @@ const LoginUser = () => {
               />
             </div>
             <button
+              className="global-button"
               onClick={() => {
-                setActiveUser(null);
                 setUserInputLoadingCheck(false);
+                setActiveUser(null);
               }}
             >
               Change user
