@@ -1,8 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
-import DisplayArticle from './DisplayArticle';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { ErrContext } from '../contexts/ErrContext';
+import { useState, useEffect, useContext } from "react";
+import DisplayArticle from "./DisplayArticle";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { ErrContext } from "../contexts/ErrContext";
 
 const Article = () => {
   const { setErr } = useContext(ErrContext);
@@ -20,7 +20,7 @@ const Article = () => {
         // probably need to remake server err handler
         if (body.msg) {
           setErr(body.msg);
-          navigate('/err');
+          navigate("/err");
         } else {
           setArticle(body);
         }
@@ -30,12 +30,12 @@ const Article = () => {
       })
       .catch((err) => {
         setErr(err);
-        navigate('/err');
+        navigate("/err");
       });
   }, []);
   return (
     <>
-      <div>
+      <div className="main-content">
         {loadingCheckArticle ? (
           <DisplayArticle article={article} />
         ) : (

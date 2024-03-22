@@ -1,13 +1,14 @@
-import '../styles/DisplayArticle.css';
-import moment from 'moment';
-import Comment from './Comment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faComment } from '@fortawesome/free-solid-svg-icons';
-import { useState, useContext } from 'react';
-import { ErrContext } from '../contexts/ErrContext';
-import { useNavigate } from 'react-router-dom';
-import AddComment from './AddComment';
-import { ActiveUserContext } from '../contexts/ActiveUser';
+import "../styles/DisplayArticle.css";
+import moment from "moment";
+import Comment from "./Comment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp, faComment } from "@fortawesome/free-solid-svg-icons";
+import { useState, useContext } from "react";
+import { ErrContext } from "../contexts/ErrContext";
+import { useNavigate } from "react-router-dom";
+import AddComment from "./AddComment";
+import { ActiveUserContext } from "../contexts/ActiveUser";
+import avatar from "../assets/avatar.jpg";
 
 const DisplayArticle = ({ article }) => {
   const navigate = useNavigate();
@@ -27,9 +28,9 @@ const DisplayArticle = ({ article }) => {
       fetch(
         `https://news-lerning-project.onrender.com/api/articles/${aritcle_id}`,
         {
-          method: 'PATCH',
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ inc_votes: 1 }),
         }
@@ -37,7 +38,7 @@ const DisplayArticle = ({ article }) => {
         .then((response) => response.json())
         .catch((err) => {
           setErr(err);
-          navigate('/err');
+          navigate("/err");
         });
     } else {
       setcurrentUserVote(currentUserVote - 1);
@@ -45,9 +46,9 @@ const DisplayArticle = ({ article }) => {
       fetch(
         `https://news-lerning-project.onrender.com/api/articles/${aritcle_id}`,
         {
-          method: 'PATCH',
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ inc_votes: -1 }),
         }
@@ -55,7 +56,7 @@ const DisplayArticle = ({ article }) => {
         .then((response) => response.json())
         .catch((err) => {
           setErr(err);
-          navigate('/err');
+          navigate("/err");
         });
     }
   };
@@ -97,45 +98,78 @@ const DisplayArticle = ({ article }) => {
   return (
     <>
       <div className="aritcle-block">
-        <h2>{article.title}</h2>
-        <div className="author-block">
-          <span className="author">{article.author}</span>
-          <span className="article-date">
-            {moment(article.created_at).format('LLLL')}
-          </span>
-        </div>
-        <div>{article.body}</div>
+        <header>
+          <div className="title">
+            <h2>
+              <a href="#">{article.title}</a>
+            </h2>
+            <p>{article.body}</p>
+          </div>
+          <div className="author-block">
+            <img src={avatar} alt="" />
+            <div className="author">
+              <span className="name">Brave Kid</span>
+              <span className="published">
+                {moment(article.created_at).format("LLLL")}
+              </span>
+            </div>
+          </div>
+        </header>
         <div className="image-block">
           <img
             src={article.article_img_url}
             alt={`image for article ${article.title} `}
           />
         </div>
-        <div className="actions">
-          <div className="votes">
-            <button
-              onClick={() => {
-                handleArticleVotesClick(article.article_id);
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faThumbsUp}
-                color={isVoted ? 'red' : 'black'}
-              />
-              {currentUserVote}
-            </button>
-          </div>
-          <div className="comments">
-            <button
-              className="view-comments"
-              onClick={() => {
-                handleViewComments(article.article_id);
-              }}
-            >
-              <FontAwesomeIcon icon={faComment} />
-              {article.comment_count}
-            </button>
-          </div>
+        <footer>
+          <ul className="actions">
+            <li>
+              <button
+                type="button"
+                className="button large"
+                onClick={() => {
+                  navigate(`/article/${article.article_id}`);
+                }}
+              >
+                Continue Reading
+              </button>
+            </li>
+          </ul>
+          <ul className="stats">
+            <li>
+              <a href="#">General</a>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  handleArticleVotesClick(article.article_id);
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faThumbsUp}
+                  color={isVoted ? "#da3a18" : "rgba(160, 160, 160, 0.8)"}
+                />
+                {currentUserVote}
+              </button>
+            </li>
+            <li>
+              <button
+                className="view-comments"
+                onClick={() => {
+                  handleViewComments(article.article_id);
+                }}
+                title="Log in to post a comment"
+              >
+                <FontAwesomeIcon
+                  icon={faComment}
+                  color="rgba(160, 160, 160, 0.8)"
+                />
+                {article.comment_count}
+              </button>
+            </li>
+          </ul>
+        </footer>
+        <div className="more-actions">
           <div>
             <button
               disabled={!activeUser ? alowAddComment : false}
@@ -145,9 +179,9 @@ const DisplayArticle = ({ article }) => {
             >
               {activeUser
                 ? alowAddComment
-                  ? 'Add your comment'
-                  : 'processing your comment'
-                : 'login to post comments'}
+                  ? "Add your comment"
+                  : "processing your comment"
+                : "login to post comments"}
             </button>
           </div>
         </div>

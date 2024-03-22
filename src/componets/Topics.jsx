@@ -99,7 +99,7 @@ const Topics = () => {
           <div>Loading topics</div>
         )}
       </div>
-      <div>
+      <div className="main-content">
         {articles ? (
           articlesLoadingCheck ? (
             articles.map((oneArticle, index) => {
